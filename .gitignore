@@ -1,4 +1,4 @@
 *.pyc
 .idea/
-model/pytorch_model.bin
+ml_model/pytorch_model.bin
 .env
