@@ -1,3 +1,4 @@
+from colorama import ansi
 from vkbottle.framework.labeler import BotLabeler
 
 from config import api
@@ -9,7 +10,7 @@ from database.models.message import get_top_toxic_users
 command_labeler = BotLabeler()
 
 @command_labeler.chat_message(text="/stats")
-async def handle_commands(message: Message):
+async def handle_stats(message: Message):
     user_info = await api.users.get(user_ids=message.from_id)
     if user_info:
         is_created_user = User.create_user(first_name=user_info[0].first_name, last_name=user_info[0].last_name,
@@ -25,3 +26,8 @@ async def handle_commands(message: Message):
             answer += f"{medal_icons[i]} {row[0]} {row[1]} | {row[2]:>4} | {round(row[3], 2):>4} | {round(row[4], 2):>4}\n"
     answer += "__________________________________________________________________________________________"
     await message.answer(answer)
+
+
+@command_labeler.chat_message(text="/help")
+async def handle_help(message: Message):
+    await message.answer("")

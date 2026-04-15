@@ -10,3 +10,5 @@ load_dotenv()
 api = API(token=os.environ.get('VK_BOT_TOKEN'))
 labeler = BotLabeler()
 toxic_classifier = ToxicityClassifier()
+
+TOXIC_SCORE_THRESHOLD = 0.75
