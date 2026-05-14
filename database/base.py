@@ -1,22 +1,31 @@
-import os
-
-from sqlalchemy import create_engine
-from sqlalchemy.dialects import postgresql
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import declarative_base, sessionmaker
-from torch.backends.quantized import engine
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from dotenv import load_dotenv
+import os
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+LOG = logging.getLogger(__name__)
+
 
 load_dotenv()
-POSTGRES_USER = os.environ.get("POSTGRES_USER")
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
-DB_HOST = os.environ.get("DB_HOST")
-DB_PORT = os.environ.get("DB_PORT")
-DB_NAME = os.environ.get("DB_NAME")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
-Base = declarative_base()
-engine = create_engine(DATABASE_URL, echo=True)
-Session = sessionmaker(bind=engine)
-session = Session()
+
+engine = create_async_engine(DATABASE_URL, echo=True)
+async_session = async_sessionmaker(engine, expire_on_commit=False)
+
+
+class Base(DeclarativeBase):
+    pass
+
+
+async def create_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    LOG.info("Таблицы созданы")
