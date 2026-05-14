@@ -1,20 +1,22 @@
-from vkbottle import Bot, bot
-
-from config import api
-from database.base import Base, engine
 from vkbottle import Bot
+from vkbottle.bot import Message
 
-from config import api, labeler
-from database.base import Base, engine
-from handlers import command_labeler
-from handlers import chat_labeler
+from ml_model.toxicity_classifier import check_message
 
-labeler.load(command_labeler)
-labeler.load(chat_labeler)
+import os
+from dotenv import load_dotenv
 
-bot = Bot(api=api, labeler=labeler)
+load_dotenv()
+TOKEN = os.getenv("VK_BOT_TOKEN")
+bot = Bot(TOKEN)
 
-Base.metadata.create_all(engine)
 
-print("Бот запущен...")
+@bot.on.message()
+async def echo(message:Message):
+    result = check_message(message.text)
+    await message.answer(f"{message.text} - {result}")
+
+print("Бот запущен")
 bot.run_forever()
+
+
