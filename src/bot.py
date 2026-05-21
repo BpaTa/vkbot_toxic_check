@@ -16,7 +16,9 @@ bot = Bot(api=API)
 bot.loop_wrapper.on_startup.append(init_db())
 
 # Добавление labeler 
+bot.labeler.load(command_labeler)
 bot.labeler.load(chat_labeler)
+
 
 log.info("Бот запущен..")
 bot.run_forever()

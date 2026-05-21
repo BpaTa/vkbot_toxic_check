@@ -5,10 +5,12 @@ import logging
 from config import SQLALCHEMY_DATABASE_URI
 from vkbottle.modules import logger as log
 
-logging.getLogger("vk_bottle").setLevel("INFO")
+logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
+logging.getLogger("sqlalchemy.pool").setLevel(logging.WARNING)
+logging.getLogger("sqlalchemy.dialects").setLevel(logging.WARNING)
 
 
-engine = create_async_engine(SQLALCHEMY_DATABASE_URI, echo=True)
+engine = create_async_engine(SQLALCHEMY_DATABASE_URI, echo=False)
 async_session = async_sessionmaker(
     bind=engine, 
     class_=AsyncSession, 
@@ -24,4 +26,4 @@ async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     
-    log.debug("Таблицы созданы")
+    log.debug("БД инициализирована")

@@ -4,8 +4,9 @@ from transformers import BertTokenizer, pipeline, BertForSequenceClassification
 import logging
 
 from config import ML_MODEL, ML_MODEL_CACHE_DIR, TOXIC_LEVEL_THRESHOLD
+from vkbottle.modules import logger as log
 
-log = logging.getLogger(__name__)
+
 
 try:
     tokenizer = BertTokenizer.from_pretrained(ML_MODEL, cache_dir=ML_MODEL_CACHE_DIR)
@@ -29,4 +30,4 @@ def is_toxic_message(text: str) -> bool:
     toxic_score = round(F.softmax(logits, dim=1)[0,1].item(), 3)
     log.debug(f"Уровень токсчиности для сообщения {text} - {toxic_score}")
     
-    return  toxic_score >= TOXIC_LEVEL_THRESHOLD
+    return toxic_score >= TOXIC_LEVEL_THRESHOLD

@@ -13,7 +13,8 @@ async def handle_message(message: Message):
     chat_id = message.peer_id
     user_id = message.from_id
 
-    vk_users = await API.users.get(users_ids=[user_id,], fields=['first_name_nom', 'last_name_nom', 'nickname',])
+    vk_users = await message.ctx_api.users.get(user_ids=[user_id,])
+    #vk_users = await message.ctx_api.request("users.get", {"user_ids": user_id})
     if vk_users:
         first_name = vk_users[0].first_name
         last_name = vk_users[0].last_name
