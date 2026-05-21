@@ -1,17 +1,16 @@
 from vkbottle import Bot
 from vkbottle.bot import Message
-import asyncio
 import logging
-from database.base import engine, Base, init_db
-import os
+from database.base import init_db
 from config import BOT_TOKEN
 from handlers import chat_labeler
+from vkbottle.modules import logger as log
+from config import API
+
+logging.getLogger("vkbottle").setLevel("DEBUG")
 
 
-log = logging.getLogger(__name__)
-
-
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(api=API)
 
 # Инициализация БД перед запуском бота
 bot.loop_wrapper.on_startup.append(init_db())

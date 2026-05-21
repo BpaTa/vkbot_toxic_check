@@ -1,7 +1,4 @@
 torch
-vk_api
-requests
-mysql-connector-python
 transformers
 sqlalchemy
 psycopg2-binary

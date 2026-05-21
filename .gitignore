@@ -1,4 +1,7 @@
 *.pyc
 .idea/
-ml_model/pytorch_model.bin
+ml_model/*
+!.py
+*.log
 .env
+.vscode

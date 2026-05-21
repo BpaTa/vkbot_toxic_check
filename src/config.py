@@ -1,9 +1,11 @@
 from envparse import env
+from vkbottle import API
 
 env.read_envfile('.env')
 
 # VK
 BOT_TOKEN = env.str('BOT_TOKEN')
+API = API(token=BOT_TOKEN)
 
 # Database
 POSTGRES_HOST = env.str('POSTGRES_HOST', default='localhost')
